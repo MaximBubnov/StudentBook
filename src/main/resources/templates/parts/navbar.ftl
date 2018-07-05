@@ -20,7 +20,7 @@
                 <a class="nav-link" href="/study/subjects">My Subjects</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/">My Exams</span></a>
+                <a class="nav-link" href="#">My Exams</span></a>
             </li>
             </#if>
             <#if isAdmin>
