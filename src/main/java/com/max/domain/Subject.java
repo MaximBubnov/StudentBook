@@ -1,5 +1,7 @@
 package com.max.domain;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
@@ -21,6 +23,27 @@ public class Subject implements Serializable{
     @CollectionTable(name = "subject_group", joinColumns = @JoinColumn(name = "subject_id"))
     @Enumerated(EnumType.STRING)
     private Set<GroupName> groupNames;
+
+    private String filename;
+
+    @Type(type = "text")
+    private String description;
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Set<GroupName> getGroupNames() {
         return groupNames;

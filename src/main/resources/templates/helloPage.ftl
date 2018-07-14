@@ -23,9 +23,10 @@
 <div class="using">
     <p>Made with:</p>
     </br>
-    <p>Spring: Boot, Security, Data JPA</p>
+    <p>Spring: Boot, Security, Data JPA, Mail</p>
     <p>Hibernate, MySQL</p>
     <p>Bootstrap, Freemarker, React</p>
+    <p>Google Captcha</p>
 </div>
 
 

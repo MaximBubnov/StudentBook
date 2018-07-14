@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Collection;
@@ -26,6 +27,12 @@ public class User implements Serializable, UserDetails {
 
     private boolean active;
 
+    @Email(message = "Email is not correct")
+    @NotBlank(message = "Email cannot be empty")
+    private String email;
+
+    private String activationCode;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
@@ -40,6 +47,22 @@ public class User implements Serializable, UserDetails {
 
     public void setExams(Set<Exams> exams) {
         this.exams = exams;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 
     public boolean isActive() {

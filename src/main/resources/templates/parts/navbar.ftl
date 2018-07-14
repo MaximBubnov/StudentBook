@@ -1,7 +1,7 @@
 <#include "security.ftl">
 <#import "login.ftl" as l>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/main">МАГУ</a>
+    <a class="navbar-brand" href="#">МАГУ</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -9,18 +9,15 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
 
-            <li class="nav-item">
-                <a class="nav-link" href="/main">Home</span></a>
-            </li>
             <#if user??>
             <li class="nav-item">
-                <a class="nav-link" href="/main">My Schedule</span></a>
+                <a class="nav-link" href="/main">Main Page</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/study/subjects">My Subjects</span></a>
+                <a class="nav-link" href="/study/subjects">Subjects List</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">My Exams</span></a>
+                <a class="nav-link" href="/exams/exam/${currentUserId}">Exams Book</span></a>
             </li>
             </#if>
             <#if isAdmin>

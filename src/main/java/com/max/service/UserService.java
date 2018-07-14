@@ -19,6 +19,10 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private MailSender mailSender;
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findByUsername(username);
@@ -45,7 +49,47 @@ public class UserService implements UserDetailsService {
         //если нет
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
+        user.setActivationCode(UUID.randomUUID().toString());
 
+        userRepo.save(user);
+
+        //если у него есть емаил, то отправим ему сообщение
+
+        sendMessage(user);
+
+        return true;
+    }
+
+
+    //отправка сообщения с активационным кодом
+    private void sendMessage(User user) {
+        if(!StringUtils.isEmpty(user.getEmail())) {
+
+            String message = String.format(
+                    "Hello! \n" +
+                            "Welcome to Exams Book МАГУ! Your login and password:  \n" +
+                            "Login: %s \n" +
+                            "Password: %s \n" +
+                            "Please, visit next link : http://localhost:8080/activate/%s",
+                    user.getUsername(),
+                    user.getPassword(),
+                    user.getActivationCode()
+            );
+
+            mailSender.send(user.getEmail(), "Activation code", message);
+        }
+    }
+
+    //пользователь активирован или нет
+    public boolean activateUser(String code) {
+        //возвращаем пользователя по определенному коду
+        User user = userRepo.findByActivationCode(code);
+
+        if(user == null) {
+            return false;
+        }
+        //если все ок - код = 0
+        user.setActivationCode(null);
         userRepo.save(user);
 
         return true;
@@ -73,7 +117,23 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public void updateProfile(User user, String password) {
+    public void updateProfile(User user, String password, String email) {
+        //получаем емаил изначальные
+        String userEmail = user.getEmail();
+
+        //изменен ли емаил
+        boolean isEmailChanged = ((email != null && !email.equals(userEmail)) ||
+                (userEmail!=null && !userEmail.equals(email)));
+
+        //если да
+        if(isEmailChanged) {
+            user.setEmail(email); // то устанавливаем новый
+            //если он установил новый емаил
+            if(!StringUtils.isEmpty(email)) {
+                user.setActivationCode(UUID.randomUUID().toString()); // генерируем ему новый код
+            }
+        }
+
         //если юзер установил новый пароль
         if(!StringUtils.isEmpty(password)) {
             user.setPassword(password); // устанавливаем его юзеру
@@ -81,5 +141,10 @@ public class UserService implements UserDetailsService {
 
         //после всего этого сохраняем пользователя в базе данных
         userRepo.save(user);
+
+        //и отправляем ему активайшен код, только тогда когда емаил был изменен
+        if (isEmailChanged) {
+            sendMessage(user);
+        }
     }
 }

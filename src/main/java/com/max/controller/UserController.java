@@ -62,6 +62,7 @@ public class UserController {
     @GetMapping("profile")
     public String getProfile(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("email", user.getEmail());
 
         return "profile";
     }
@@ -69,9 +70,10 @@ public class UserController {
     @PostMapping("profile")
     public String updateProfile(
             @AuthenticationPrincipal User user,
-            @RequestParam String password) {
+            @RequestParam String password,
+            @RequestParam String email) {
 
-        userService.updateProfile(user, password);
+        userService.updateProfile(user, password, email);
 
         return "redirect:/user/profile";
     }

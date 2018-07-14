@@ -1,74 +1,92 @@
 package com.max.controller;
 
-import com.max.domain.GroupName;
+import com.max.domain.Exams;
 import com.max.domain.Subject;
 import com.max.domain.User;
+import com.max.service.ExamsService;
 import com.max.service.SubjectService;
+import com.max.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
+import java.util.Date;
+import java.util.Set;
 
 @Controller
-@RequestMapping("/study")
+@RequestMapping("/exams")
 public class ExamsController {
+
+    @Autowired
+    private ExamsService examsService;
 
     @Autowired
     private SubjectService subjectService;
 
-    @GetMapping("/subjects")
-    public String subjectsList(Model model) {
-        model.addAttribute("groups", GroupName.values());
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/exam/{user}")
+    public String examsList(Model model,
+                            @PathVariable User user,
+                            @AuthenticationPrincipal User currentUser,
+                            @RequestParam(required = false) Exams exams) {
+
+
+        Set<Exams> examsSet = user.getExams();
+
+        model.addAttribute("username", currentUser.getUsername());
+        model.addAttribute("examsList", examsSet);
         model.addAttribute("subjects", subjectService.findAll());
-        return "subjects";
+        model.addAttribute("isCurrentUser", currentUser.equals(user));
+        return "examsList";
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/subjects")
-    public String addSubjects(
-            @Valid Subject subject,
-            @RequestParam Map<String, String> form,
+
+    @PostMapping("/examAdd")
+    public String addExams(
+            @Valid Exams exams,
             BindingResult bindingResult,
-            Model model
-            ) {
+            @AuthenticationPrincipal User user,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTime,
+            Model model) {
 
-        model.addAttribute("subject", subject);
-        if(!subjectService.addSubjectBol(subject)) {
-            model.addAttribute("subjectError", "Subject is already add!");
-            return "subjects";
-        }
+        model.addAttribute("username", user.getId());
+        model.addAttribute("date", dateTime);
 
-        subjectService.addSubject(subject, form);
+        examsService.addExams(exams, user);
 
-        return "redirect:/study/subjects";
+        return "redirect:/main";
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     @PostMapping("delete/{id}")
-    public String deleteSubjectById(@PathVariable Long id) {
-        subjectService.deleteSubject(id);
-        return "redirect:/study/subjects";
+    public String deleteExamsById(@PathVariable Long id) {
+        examsService.deleteExam(id);
+        return "redirect:/main";
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/subject/{subject}")
-    public String editSubjectForm(@PathVariable Subject subject, Model model) {
-        model.addAttribute("subject", subject);
-        model.addAttribute("groups", GroupName.values());
 
-        return "subjectEdit";
+    @GetMapping("/edit/{exam}")
+    public String editExams(@PathVariable Exams exam, Model model) {
+
+        model.addAttribute("exam", exam);
+        model.addAttribute("subjects", subjectService.findAll());
+
+        return "examsEdit";
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping
-    public String subjectSave(
-            @RequestParam String name,
-            @RequestParam Map<String, String> form,
-            @RequestParam("subjectId") Subject subject) {
 
-        subjectService.saveSubject(subject, name, form);
+    @PostMapping("/save")
+    public String saveExam(@RequestParam Subject subject,
+                           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
+                           @RequestParam("examsId") Exams exams) {
 
-        return "redirect:/study/subjects";
+        examsService.saveExam(exams, subject, date);
+
+        return "redirect:/main";
+
     }
+
 }

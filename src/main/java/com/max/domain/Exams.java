@@ -1,6 +1,9 @@
 package com.max.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -21,6 +24,8 @@ public class Exams implements Serializable{
     @JoinColumn(name = "subject_id")
     private Subject subject;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     public Long getId() {

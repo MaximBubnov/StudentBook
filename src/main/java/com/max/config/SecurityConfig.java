@@ -21,13 +21,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
 
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                        .antMatchers("/", "/static/**").permitAll()
+                        .antMatchers("/", "/static/**", "/activate/*").permitAll()
                         .anyRequest().authenticated()
                 .and()
                         .formLogin()
