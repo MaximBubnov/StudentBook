@@ -6,6 +6,7 @@ import com.max.domain.Subject;
 import com.max.repository.SubjectRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,7 +50,7 @@ public class SubjectService {
         subjectRepo.deleteById(id);
     }
 
-    public void saveSubject(Subject subject, String name, Map<String, String> form) {
+    public void saveSubject(Subject subject, String name, Map<String, String> form, String description) {
 
         subject.setName(name);
 
@@ -64,6 +65,8 @@ public class SubjectService {
                 subject.getGroupNames().add(GroupName.valueOf(key));
             }
         }
+
+        subject.setDescription(description);
 
         subjectRepo.save(subject);
     }

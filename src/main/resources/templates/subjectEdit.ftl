@@ -4,7 +4,7 @@
     <h1 class="text-center">Subject Editor</h1>
 </br>
 <div class="container mt-5">
-<form action="/study" method="post">
+<form action="/study" method="post" enctype="multipart/form-data">
     <div class="form-group row">
         <label class="col-sm-2 col-form-label"> Subject Name : </label>
         <div class="col-sm-6">
@@ -30,7 +30,7 @@
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label" for="exampleFormControlTextarea1">Description of Subject</label>
-        <textarea class="form-control mx-5" id="exampleFormControlTextarea1" rows="3" name="description">${subject.description}</textarea>
+        <textarea class="form-control mx-5" id="exampleFormControlTextarea1" rows="3" name="description"><#if subject.description??>${subject.description}</#if></textarea>
     </div>
     <input type="hidden" value="${subject.id}" name="subjectId">
     <input type="hidden" value="${_csrf.token}" name="_csrf">

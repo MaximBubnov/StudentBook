@@ -75,13 +75,19 @@
         </tr>
         </thead>
         <tbody>
+       <#-- <a href="/study/subject/${subject.id}">Edit</a>-->
     <#list subjects as subject>
     <tr>
         <td>${subject.id}</td>
         <td><#list subject.groupNames as group>${group}<#sep>, </#list> </td>
-        <td>${subject.name}</td>
+        <td><a href="/study/subject/info/${subject.id}">${subject.name}</a></td>
         <#if isAdmin>
-        <td><a href="/study/subject/${subject.id}">Edit</a></td>
+        <td>
+            <form action="/study/subject/${subject.id}" method="get">
+            <input type="hidden" value="${subject.id}" name="subjectId">
+            <input type="hidden" value="${_csrf.token}" name="_csrf">
+            <button type="submit" class="btn btn-primary">Edit</button>
+        </form></td>
         <td>
             <form action="/study/delete/${subject.id}" method="post">
                 <input type="hidden" value="${subject.id}" name="subjectId">

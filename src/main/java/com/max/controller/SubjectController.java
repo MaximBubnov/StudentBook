@@ -66,7 +66,7 @@ public class SubjectController {
         }
 
         subject.setDescription(desc);
-        subject.setFilename(file.getOriginalFilename());
+        //subject.setFilename(file.getOriginalFilename());
 
         saveFile(subject, file);
 
@@ -112,14 +112,27 @@ public class SubjectController {
         return "subjectEdit";
     }
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping
+    @PostMapping(headers = "content-type=multipart/*")
     public String subjectSave(
             @RequestParam String name,
             @RequestParam Map<String, String> form,
-            @RequestParam("subjectId") Subject subject) {
+            @RequestParam("subjectId") Subject subject,
+            @RequestParam String description,
+            @RequestParam MultipartFile file) throws IOException {
 
-        subjectService.saveSubject(subject, name, form);
+        saveFile(subject, file);
+
+        subjectService.saveSubject(subject, name, form, description);
 
         return "redirect:/study/subjects";
+    }
+
+    @GetMapping("/subject/info/{subject}")
+    public String infoSubject(@PathVariable Subject subject, Model model) {
+
+        model.addAttribute("groups", GroupName.values());
+        model.addAttribute("subject", subject);
+
+        return "subjectInfo";
     }
 }
