@@ -47,7 +47,7 @@ public class UserService implements UserDetailsService {
         }
 
         //если нет
-        user.setActive(true);
+        user.setActive(false);
         user.setRoles(Collections.singleton(Role.USER));
         user.setActivationCode(UUID.randomUUID().toString());
 
@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
                     user.getActivationCode()
             );
 
-            mailSender.send(user.getEmail(), "Activation code", message);
+            mailSender.send(user.getEmail(), "Activation code. АФ МАГУ", message);
         }
     }
 
@@ -90,6 +90,7 @@ public class UserService implements UserDetailsService {
         }
         //если все ок - код = 0
         user.setActivationCode(null);
+        user.setActive(true);
         userRepo.save(user);
 
         return true;

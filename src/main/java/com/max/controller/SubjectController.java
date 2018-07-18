@@ -135,4 +135,11 @@ public class SubjectController {
 
         return "subjectInfo";
     }
+
+    @GetMapping("/subject/info/links/{subject}")
+    public String linkSubject(@PathVariable Subject subject, Model model) {
+
+        model.addAttribute("subject", subject);
+        return "subjectLinks";
+    }
 }

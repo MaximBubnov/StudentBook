@@ -25,7 +25,7 @@
             <label class="col-sm-2 col-form-label "> Choose file : </label>
             <div class="custom-file col-sm-5 ml-3">
                 <input type="file" name="file" id="customFile">
-                <label class="custom-file-label" for="customFile">Choose file</label>
+                <label class="custom-file-label" for="customFile">Work Plan</label>
             </div>
         </div>
         <div class="form-group row">
@@ -75,7 +75,6 @@
         </tr>
         </thead>
         <tbody>
-       <#-- <a href="/study/subject/${subject.id}">Edit</a>-->
     <#list subjects as subject>
     <tr>
         <td>${subject.id}</td>

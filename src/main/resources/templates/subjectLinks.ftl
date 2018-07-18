@@ -14,13 +14,9 @@
     </div>
     <div class="card-body">
         <h5 class="card-title">${subject.name}</h5>
-        <p class="card-text"><#if subject.description??>${subject.description}<#else>No description</#if></p>
-        </br>
-        <h5 class="card-title">Faculties:</h5>
-        <p class="card-text"><#list subject.groupNames as group>${group}<#sep>, </#list> </p>
+        <p class="card-text">Work plan:</p>
+        <p class="card-text"><a href="/pdf/${subject.filename}">${subject.filename}</a></p>
 
-        <a href="/study/subjects" class="btn btn-primary">Go Back</a>
     </div>
 </div>
-
 </@c.page>
