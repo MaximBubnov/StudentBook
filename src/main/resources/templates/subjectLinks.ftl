@@ -15,8 +15,7 @@
     <div class="card-body">
         <h5 class="card-title">${subject.name}</h5>
         <p class="card-text">Work plan:</p>
-        <p class="card-text"><a href="/pdf/${subject.filename}">${subject.filename}</a></p>
-
+    <p class="card-text"><#if subject.filename??><a href="/pdf/${subject.filename}">${subject.filename}</a><#else><p class="alert alert-danger mx-5">Not found</p></#if></p>
     </div>
 </div>
 </@c.page>
