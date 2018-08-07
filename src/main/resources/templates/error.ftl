@@ -14,8 +14,8 @@
     <img src="/static/logo_normal-1-1.png" width="800" height="200">
 </div>
 
-<h1 class="text-center mt-5"> Please
-    Confirm user registration.</h1>
+<h1 class="text-center mt-5">Ooooops! </h1>
+<h2 class="text-center mt-5">Something goes wrong. Please contact support</h2>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

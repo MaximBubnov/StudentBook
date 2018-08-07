@@ -71,9 +71,16 @@ public class UserController {
     public String updateProfile(
             @AuthenticationPrincipal User user,
             @RequestParam String password,
-            @RequestParam String email) {
+            @RequestParam String email,
+            @RequestParam("password2") String passwordConfirm,
+            Model model) {
 
-        userService.updateProfile(user, password, email);
+        if(user.getPassword().equals(passwordConfirm)) {
+            userService.updateProfile(user, password, email);
+            model.addAttribute("luck", "Successfully update");
+        } else {
+            model.addAttribute("password2", "Password does not matched");
+        }
 
         return "redirect:/user/profile";
     }
